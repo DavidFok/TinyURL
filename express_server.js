@@ -40,6 +40,12 @@ app.post('/urls/:id/delete', (req, res) => {
   res.redirect(301, "/urls");
 });
 
+app.post('/urls/:id/', (req, res) => {
+  urlDatabase[req.params.id] = req.body.longURL;
+  console.log("update successful. redirecting");
+  res.redirect(301, "/urls");
+});
+
 app.post("/urls", (req, res) => {
   console.log(req.body);
   const shortURL = generateRandomString();
