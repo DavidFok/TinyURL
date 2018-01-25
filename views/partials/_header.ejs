@@ -1,24 +1,28 @@
-<h1>
-    TinyURL Maker!!!!
+<% if (!user) { %>
+<a href="/login">
+  <button style="float: right; margin: 2px" type="submit">Login
+  </button>
+</a>
+<a href="/register">
+  <button style="float: right; margin: 2px" type="submit">Register
+  </button>
+</a>
+<% } else { %>
+<form method="POST" action="/logout">
+  <button style="float: right; margin: 2px" type="submit">Logout
+  </button>
+</form>
+<% } %>
+<h1 style= "line-height: 20px">
+    TinyURL Maker!!!! ✌(-‿-)✌
 </h1>
-<body>
-  <table>
-    <% if (username) { %>
-    <table>
-      <td>
-        user: <%= username %>
-      </td>
-      <td>
-        <form method="POST" action="/logout" style="margin:10px">
-          <input type='submit' value='logout'>
-        </form>
-      </td>
-    </table>
-    <% } else { %>
-    <tr>
-      <form method="POST" action="/login" style="margin:10px">
-        <input id=login type='text' name='username' size= '40'>
-        <input type='submit' value='login'>
-    </tr> <% } %>
-  </form>
+<body style= "line-height: 1px">
+  <% if (user) { %>
+  <p>
+      User: <%= user.email %>
+  </p>
+  <% } %>
 </body>
+<h2 style= "line-height: 0px">
+  ____________________________________________________________
+</h2>
