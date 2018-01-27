@@ -4,22 +4,26 @@
   <title>TinyApp</title>
 </head>
 <body>
-    <header>
-      <% include partials/_header %>
-    </header>
-    <table>
-    <% for(var key in urls) {%>
-      <p>
+    <header><% include partials/_header %></header>
+    <table width="50%">
+      <% for (var key in urls) { %>
+        <% if (user.id === urls[key].userId) { %>
         <tr>
-          <td><%= key %></td>
+          <td><a href="/u/<%= key %>"><%= key %></a></td>
           <td> || </td>
-          <td><%= urls[key] %></td>
-          <td><a href="/urls/<%= key %>">edit</a></td>
-          <td><form method="POST" action="/urls/<%= key %>/delete"><button type="submit">🗑</button></form></td>
+          <td align="center"><%= urls[key].longURL %></td>
+          <% if (user.id === urls[key].userId) { %>
+            <td><a href="/urls/<%= key %>">edit</a></td>
+            <td>
+              <form method="POST" action="/urls/<%= key %>/delete">
+                <button type="submit">🗑</button>
+              </form>
+          </td>
+          <% } %>
         </tr>
-      </p>
-    <% } %>
+        <% } %>
+      <% } %>
     </table>
-    <a href="/urls/new">Make your own TinyURL :)</a>
+    <a style="line-height:25px" href="/urls/new">Make your own TinyURL :)</a>
 </body>
 </html>
