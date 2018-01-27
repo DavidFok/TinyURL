@@ -52,6 +52,13 @@ function getUserId(reqEmail) {
   }
 }
 
+function checkCookies (cookies) {
+  if (cookies.session.user_id) {
+    return true;
+  } else { return false;
+  }
+}
+
 //Head page
 app.get("/", (req, res) => {
   let templateVars = {
@@ -83,7 +90,7 @@ app.get("/login", (req, res) => {
 
 //Url list page
 app.get("/urls", (req, res) => {
-  if (!req.session.user_id) {
+  if (!checkCookies(req)) {
     res.redirect("/");
   } else {
     let templateVars = {
@@ -91,15 +98,12 @@ app.get("/urls", (req, res) => {
       user: users[req.session.user_id]
     };
     res.render("urls_index", templateVars);
-    // console.log(templateVars.urls);
-    // console.log(users);
-    // console.log(templateVars.user);
   }
 });
 
 //create a new TinyURL page
 app.get("/urls/new", (req, res) => {
-  if (!req.session.user_id) {
+  if (!checkCookies(req)) {
     res.redirect("/login");
   } else {
     let templateVars = {
@@ -125,11 +129,8 @@ app.post("/login", (req, res) => {
         cookieValue = id;
       }
   }
-
   req.session.user_id = cookieValue;
   res.redirect("/urls");
-  console.log("logged in!");
-  console.log("cookie sent!!");
   }
 });
 
@@ -150,18 +151,15 @@ app.post("/register", (req, res) => {
     };
     req.session.user_id = userIdNum;
     res.redirect("/urls");
-    console.log("user registered!!");
-    console.log(users);
   }
 });
 
 //delete a created TinyURL
 app.post("/urls/:id/delete", (req, res) => {
-  if (!req.session.user_id) {
+  if (!checkCookies(req)) {
     res.redirect("/login");
   } else {
     delete urlDatabase[req.params.id];
-    console.log("delete successful. redirecting");
     res.redirect(301, "/urls");
   }
 });
@@ -170,63 +168,57 @@ app.post("/urls/:id/delete", (req, res) => {
 app.post("/logout", (req, res) => {
   req.session = null;
   res.redirect("/urls");
-  console.log("cookie deleted!!");
 });
 
 //receives the updated LongURL linked to the TinyURL in /:id/
 app.post("/urls/:id", (req, res) => {
-  if (!req.session.user_id) {
+  if (!checkCookies(req)) {
     res.redirect("/login");
   } else {
     urlDatabase[req.params.id].longURL = req.body.longURL;
     res.redirect("/urls");
-    console.log("update successful. redirecting");
-    console.log(req.params.id);
   }
 });
 
 //Creating a new TinyURL
 app.post("/urls", (req, res) => {
-  if (!req.session.user_id) {
+  if (!checkCookies(req)) {
     res.redirect("/login");
   } else {
     let longUrl = req.body.longURL;
     if (longUrl.split('/')[0] !== 'http:') {
-      longUrl.split('/').splice(0, 0, 'http://').join("");
+      longUrl = 'http://' + longUrl;
     }
     const shortURL = generateRandomString();
     urlDatabase[shortURL] = {
       "longURL": longUrl,
       "userId": req.session.user_id
     }
-    console.log(longUrl);
-  };
+  }
   res.redirect(302, "/urls");
 });
 
-app.get("/u/:shortURL", (req, res) => {
-  const url = urlDatabase[req.params.shortURL];
+app.get("/u/:id", (req, res) => {
+  const url = urlDatabase[req.params.id];
   if (!url) {
     res.sendStatus(404);
     return;
   }
   let longURL = url.longURL;
   res.redirect(longURL);
-  console.log(req);
 });
 
 app.get("/urls/:id", (req, res) => {
-  if (!req.session.user_id) {
+  let templateVars = {
+      shortURL: req.params.id,
+      user: users[req.session.user_id]
+    };
+  if (!checkCookies(req)) {
     res.redirect("/login");
   } else if (req.session.user_id !== urlDatabase[req.params.id].userId) {
     res.render("wrong_page", templateVars);
   } else {
-    let templateVars = {
-      shortURL: req.params.id,
-      user: users[req.session.user_id]
-    };
     res.render("urls_show", templateVars);
-    console.log(templateVars.shortURL);
   }
 });
 app.listen(PORT, () => {
