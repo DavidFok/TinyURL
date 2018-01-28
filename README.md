@@ -12,6 +12,8 @@ Designed to function as a website.
 It will generate a shortened "URL" for a given URL.
 It also employs session control via cookies to provide a personalized experience for every user.
 
+![alt text](docs/landing-page.png "Landing page")
+![alt text](docs/urls-page.png "/urls list page")
 
 ## Dependencies
 
