@@ -40,3 +40,5 @@ I added a few extra features to my App as listed below:
 3. - If a user tries to access a page to which they are not supposed to have access, TinyApp will automatically redirect the user to the "/login" page.
 
 4. - When a user logs out, TinyApp will redirect to the landing page "/" rather than "/urls".
+
+5. - when a user is logged in but tries to access a /urls/:id page that's not his, the user is redirected to an error page with links to return to the "/urls" page or logout.

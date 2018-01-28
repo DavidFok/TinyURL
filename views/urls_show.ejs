@@ -9,7 +9,7 @@
     </header>
     <p style= "line-height: 10px"><strong>Your TinyURL: <%= shortURL %>/</strong></p>
     <form method="POST" action="/urls/<%= shortURL %>/" style="margin:100px;">
-      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+      <input id="longURL" type="text" name="longURL" placeholder="<%= longURL %>" style="width: 300px">
       <input type="submit" value="Update">
     </form>
     <a href="/urls">back to URL list</a>

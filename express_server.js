@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
@@ -209,8 +208,12 @@ app.get("/u/:id", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
+  if (!req.params.tagId) {
+    res.sendStatus(404);
+  }
   let templateVars = {
       shortURL: req.params.id,
+      longURL: urlDatabase[req.params.id].longURL,
       user: users[req.session.user_id]
     };
   if (!checkCookies(req)) {
