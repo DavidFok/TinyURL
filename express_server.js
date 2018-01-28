@@ -208,7 +208,8 @@ app.get("/u/:id", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  if (!req.params.tagId) {
+  const url = urlDatabase[req.params.id];
+  if (!url) {
     res.sendStatus(404);
   }
   let templateVars = {
