@@ -6,7 +6,7 @@
 <body>
     <header><% include partials/_header %></header>
     <table width="50%">
-      <% for (var key in urls) { %>
+      <% for (let key in urls) { %>
         <% if (user.id === urls[key].userId) { %>
         <tr>
           <td><a href="/u/<%= key %>"><%= key %></a></td>
